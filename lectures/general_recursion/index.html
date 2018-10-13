@@ -31,16 +31,16 @@
 
 			    <p class="fragment"><i>Key idea:</i>
 			    Exchange <span style="border: solid #8080ff
-			    1px">totality</span>
+			    2px">totality</span>
 			    for <span style="border: solid #ff8080
-			    1px">universality</span></p>
+			    2px">universality</span></p>
 
 			    <p class="fragment"><i>Increase <span style="border: solid #ff8080
-			    1px">expressive
+			    2px">expressive
 				  power</span> of programs at the expense of
 				<span style="border: solid #8080ff
-					     1px">termination
-					     guarantees</span></i></p>
+					     2px">termination
+					     guarantee</span></i></p>
 
 			  </section>
 			  <section>
@@ -54,36 +54,66 @@
 				<th>Properties</th>
 			      </tr>
 			      <tr class="fragment">
-				<td><b>System T</b><br />(PFPL ch. 9)</td>
-				<td>natural numbers, higher-order functions, sum &amp; product types, totality, type safety</td>
+				<td><b>System T</b><br />(PFPL §9)</td>
+				<td>natural numbers, higher-order
+				functions, products, sums, booleans,
+				enumerations, options, totality, type
+				safety</td>
 			      </tr>
 			      <tr class="fragment">
-				<td><b>System M</b><br />(PFPL ch. 15)</td>
-				<td><i>System T plus</i> (co-)inductive types, via <i>partial recursion</i></td>
+				<td><b>System M</b><br />(PFPL §15)</td>
+				<td><i>System T plus</i>
+				(co-)inductive types <i>(via recursion on
+				    types)</i></td>
 			      </tr>
 			      <tr class="fragment">
-				<td><b>System F</b><br />(PFPL ch. 16)</td>
+				<td><b>System F</b><br />(PFPL §16)</td>
 				<td><i>System M plus</i> parametric polymorphic types</td>
 			      </tr>
 			      <tr class="fragment">
-				<td><b>System FE</b><br />(PFPL ch. 17)</td>
+				<td><b>System FE</b><br />(PFPL §17)</td>
 				<td><i>System F plus</i> existentially-quantified types</td>
 			      </tr>
 			      <tr class="fragment">
-				<td><b>System F<sub>ω</sub></b><br />(PFPL ch. 18)</td>
+				<td><b>System F<sub>ω</sub></b><br />(PFPL §18)</td>
 				<td><i>System FE plus</i> universally-quantified types</td>
 			      </tr>
 			    </table>
 			  </section>
 
 			  <section>
-			    <h3>Something's Missing...</h3>
+			    <h3>What We Gain</h3>
 
-			    <p class="fragment">System F<sub>ω</sub> is powerful, but limited and cumbersome:</p>
+			    <p class="fragment">With each refinement, we:</p>
+
+			    <p class="fragment">Increase generality</p>
+			    <p class="fragment">Reduce type-specific syntax</p>
+			    <p class="fragment">Increase expressive power</p>
+			  </section>
+
+			  <section>
+			    <h3>However, Something's Missing...</h3>
+
+			    <p class="fragment">System F<sub>ω</sub>
+			    is reasonably expressive, but limited and
+			    cumbersome:</p>
 
 			    <ul>
-			      <li class="fragment">Total languages are not universal</li>
-			      <li class="fragment">Programs must encode their termination proofs</li>
+			      <li class="fragment">
+				Total languages are not universal<br />
+				<span style="font-size: 75% ;
+				font-style: italic">Cannot interpret a
+				total language in itself, which would
+				require solving the Halting
+				Problem</span>
+			      </li>
+			      <li class="fragment">
+				Programs encode their termination proofs<br />
+				<span style="font-size: 75% ;
+				font-style: italic">Via the inductive
+				definition of natural numbers, on
+				which these languages are based</span>
+			      </li>
 			    </ul>
 			  </section>
 
@@ -92,21 +122,57 @@
 
 			    <p style="font-style: italic ; font-size:
 			    50%"><a href="http://homepages.inf.ed.ac.uk/gdp/publications/LCF.pdf">Plotkin,
-			    1977</a> | PFPL ch. 19</p>
+			    1977</a> | PFPL §19</p>
 
 			    <p class="fragment">System F<sub>ω</sub>
 			      plus <i>general recursion</i> via <i>partial functions</i> and 
 			      <i>fixed-point operator</i></p>
 
 			    <p class="fragment">Programs remain
-			    well-typed, but may diverge (i.e., not
-			    terminate)</p>
+			    well-typed, but may not terminate</p>
 
 			    <p class="fragment">Lazy vs. eager
 			    dynamics become subtle because
 			    sub-computations may diverge</p>
 
-			    <p class="fragment">Inspired ML and Haskell</p>
+			    <p class="fragment">PCF inspired ML and Haskell</p>
+			  </section>
+
+			  <section>
+			    <h3>Recursive Evolution</h3>
+
+			    <p class="fragment">We've relied thus far
+			      on <i>primitive recursion</i>:</p>
+
+			    <ul>
+			      <li class="fragment">System
+				  T's <code>rec()</code> construct
+				  (PFPL §9)</li>
+			      <li class="fragment">Iconic example
+			      functions: addition, multiplication,
+			      factorial</li>
+			    </ul>
+			  </section>
+
+			  <section>
+			    <h3>Recursive Evolution</h3>
+
+			    <p class="fragment">We define <i>general
+				recursion</i> via the <i>fixed-point operator</i>:</p>
+
+			    <ul>
+			      <li class="fragment">"Partial functions"
+			      are those that may diverge for some or
+			      all inputs</li>
+			      <li class="fragment">"A fixed point of a
+			      function is a value that, when applied
+			      as the input of the function, returns
+			      the same value as its
+			      output." <span style="font-size: 50% ;
+			      font-style:
+			      italic">(<a href="https://en.wikipedia.org/wiki/Fixed-point_combinator">Wikipedia</a>)</span></li>
+			      <li class="fragment"></li>
+			    </ul>
 			  </section>
 
 			</div>
