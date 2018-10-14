@@ -120,34 +120,39 @@
 			  <section>
 			    <h3>Enter PCF</h3>
 
-			    <p style="font-style: italic ; font-size:
-			    50%"><a href="http://homepages.inf.ed.ac.uk/gdp/publications/LCF.pdf">Plotkin,
-			    1977</a> | PFPL §19</p>
+			    <p style="font-style: italic ; font-size: 50%">
+			      <a href="https://www.cs.cmu.edu/~kw/scans/scott93tcs.pdf">Scott,
+			      1969</a> |
+			      <a href="http://homepages.inf.ed.ac.uk/gdp/publications/LCF.pdf">Plotkin,
+				1977</a> |
+			      PFPL §19
+			    </p>
 
 			    <p class="fragment">System F<sub>ω</sub>
-			      plus <i>general recursion</i> via <i>partial functions</i> and 
-			      <i>fixed-point operator</i></p>
+			      plus <i>general recursion</i>
+			      via <i>partial functions</i> and
+			      a <i>fixed-point operator</i></p>
 
 			    <p class="fragment">Programs remain
 			    well-typed, but may not terminate</p>
 
-			    <p class="fragment">Lazy vs. eager
-			    dynamics become subtle because
-			    sub-computations may diverge</p>
-
-			    <p class="fragment">PCF inspired ML and Haskell</p>
+			    <p class="fragment">A <i>partial
+				function</i> may diverge for some or
+				all inputs</p>
 			  </section>
 
 			  <section>
 			    <h3>Recursive Evolution</h3>
+
+			    What *is* it?
 
 			    <p class="fragment">We've relied thus far
 			      on <i>primitive recursion</i>:</p>
 
 			    <ul>
 			      <li class="fragment">System
-				  T's <code>rec()</code> construct
-				  (PFPL §9)</li>
+				  T's <code>rec()</code> (recursor)
+				  construct (PFPL §9)</li>
 			      <li class="fragment">Iconic example
 			      functions: addition, multiplication,
 			      factorial</li>
@@ -161,9 +166,6 @@
 				recursion</i> via the <i>fixed-point operator</i>:</p>
 
 			    <ul>
-			      <li class="fragment">"Partial functions"
-			      are those that may diverge for some or
-			      all inputs</li>
 			      <li class="fragment">"A fixed point of a
 			      function is a value that, when applied
 			      as the input of the function, returns
@@ -171,8 +173,145 @@
 			      output." <span style="font-size: 50% ;
 			      font-style:
 			      italic">(<a href="https://en.wikipedia.org/wiki/Fixed-point_combinator">Wikipedia</a>)</span></li>
-			      <li class="fragment"></li>
+			      <li class="fragment">Symbolically: <code>F(x) = x</code></li>
 			    </ul>
+			  </section>
+
+			  <section>
+			    <h3>Fixed-Point Operator</h3>
+
+			    <p class="fragment"></p>
+
+			    <p class="fragment"></p>
+
+			    <p class="fragment"></p>
+
+			  </section>
+
+			  <section>
+			    <h3>Haskell's <code>fix</code></h3>
+
+			    <p class="fragment">Haskell's <code>Data.Function</code>
+			    module defines <code>fix</code>:</p>
+
+			    <pre class="fragment">
+			      <code>
+Prelude> import Data.Function
+Prelude Data.Function> :info fix
+fix :: (a -> a) -> a 	-- Defined in ‘Data.Function’
+			      </code>
+			    </pre>
+
+			    <p class="fragment">The type signature
+			      means, "Give me a function from t to t,
+			      and I'll give you a t in return"</p>
+			  </section>
+
+			  <section>
+			    <h3>Let's Define Our Own <code>fix</code></h3>
+
+			    <pre class="fragment">
+			      <code>
+Prelude> let fix f = let x = f x in x
+Prelude> :info fix
+fix :: (t -> t) -> t 	-- Defined at interactive:2:5
+			      </code>
+			    </pre>
+
+			    <p class="fragment">Same shape, different type variable</p>
+			  </section>
+
+			  <section>
+			    <h3>Factorial using <code>fix</code></h3>
+
+			    <pre class="fragment">
+			      <code>
+Prelude> let fact = fix (\f -> \n -> if n == 0 then 1 else n * f(n-1))
+Prelude> :info fact
+fact :: (Eq p, Num p) => p -> p 	-- Defined at interactive:6:5
+Prelude> fact 5
+120
+			      </code>
+			    </pre>
+
+			    <p class="fragment">We pass fix an
+			    anonymous function taking "f". That
+			    function takes "n", an integer, and
+			    computes factorial with it.</p>
+			  </section>
+
+			  <section>
+			    <h3><code>fix</code>'s General Pattern</h3>
+
+			    <p class="fragment">One can "refactor" any
+			    recursive function following this
+			    pattern</p>
+
+			    <p class="fragment">The trick is finding a
+			    way to nudge the computation closer to
+			    termination at each step</p>
+			  </section>
+
+			  <section>
+			    <h3>Divergence made easy!</h3>
+
+			    <p class="fragment">All of these diverge -- why?</p>
+
+			    <pre class="fragment"><code>fix (\id -> id)</code></pre>
+
+			    <pre class="fragment"><code>fix (0:)</code></pre>
+
+			    <pre class="fragment"><code>fix (\n -> n + 1)</code></pre>
+
+			    <p class="fragment">Their computations don't shrink at each step</p>
+			  </section>
+
+			  <section>
+			    <h3>Resources for grokking fixed-points</h3>
+
+			    <div style="font-size: 75%">
+			      <p class="fragment">
+				<a href="https://www.cs.cmu.edu/~rwh/courses/ppl/">CMU
+				15-312</a> recitation notes
+				by <a href="https://www.cs.cmu.edu/~rwh/courses/ppl/recitations/rec07-partiality-jezimmer.pdf">Jake
+				Zimmerman</a>
+				and <a href="https://www.cs.cmu.edu/~rwh/courses/ppl/recitations/rec7-notes.pdf">Charles
+				Yuan</a>
+			      </p>
+
+			      <p class="fragment">
+				<a href="https://www.vex.net/~trebla/haskell/fix.xhtml">You
+				  could have re-invented fix too!</a> by
+				Albert Y. C. Lai
+			      </p>
+
+			      <p class="fragment">
+				<a href="https://hisham.hm/2011/04/04/understanding-at-last-the-y-combinator-a-programmer-friendly-perspective/">Understanding,
+				  at last, the Y Combinator - a
+				  programmer-friendly perspective</a> by
+				Hisham Muhammad
+			      </p>
+
+			      <p class="fragment">
+				<a href="https://en.wikibooks.org/wiki/Haskell/Fix_and_recursion">Fix
+				  and recursion</a> in the Haskell
+				wikibook
+			      </p>
+
+			      <p class="fragment">
+				<a href="http://web.cs.iastate.edu/~lumpe/ComS541/Resources/Lectures/FixedPoints.pdf">Fixed point lecture</a> by Markus Lumpe
+			      </p>
+			    </div>
+			  </section>
+
+			  <section>
+			    <h3>Miscellani</h3>
+
+			    <p class="fragment">Lazy vs. eager
+			    dynamics become subtle because
+			    sub-computations may diverge</p>
+
+			    <p class="fragment">PCF inspired ML and Haskell</p>
 			  </section>
 
 			</div>
