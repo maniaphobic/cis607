@@ -25,7 +25,7 @@
 		<div class="reveal">
 			<div class="slides">
 			  <section>
-			    <h3>General Recursion</h3>
+			    <h3>General Recursion and PCF</h3>
 
 			    <p>PFPL chapters 19 and 20 | TAPL chapter 11.11</p>
 
@@ -144,8 +144,6 @@
 			  <section>
 			    <h3>Recursive Evolution</h3>
 
-			    What *is* it?
-
 			    <p class="fragment">We've relied thus far
 			      on <i>primitive recursion</i>:</p>
 
@@ -178,14 +176,24 @@
 			  </section>
 
 			  <section>
-			    <h3>Fixed-Point Operator</h3>
+			    <h3>Fixed-Point Function</h3>
 
-			    <p class="fragment"></p>
+			    <p class="fragment">A function
+			    named <code>fix</code> that takes a
+			    function and returns the same function, for all functions</p>
 
-			    <p class="fragment"></p>
+			    <p class="fragment">Mathematically, <code>F(f) = f</code></p>
 
-			    <p class="fragment"></p>
+			    <p class="fragment">Big F is technically a <i>functional</i></p>
 
+			    <p class="fragment">
+			      Help!
+
+			      <ul class="fragment">
+				<li>Why does general recursion beget partiality?</li>
+				<li>How is <code>fix</code> fundamentally different from <code>rec</code>?</li>
+			      </ul>
+			    </p>
 			  </section>
 
 			  <section>
@@ -194,74 +202,96 @@
 			    <p class="fragment">Haskell's <code>Data.Function</code>
 			    module defines <code>fix</code>:</p>
 
-			    <pre class="fragment">
-			      <code>
-Prelude> import Data.Function
+			    <pre class="fragment"><code>Prelude> import Data.Function
 Prelude Data.Function> :info fix
-fix :: (a -> a) -> a 	-- Defined in ‘Data.Function’
-			      </code>
-			    </pre>
+fix :: (a -> a) -> a 	-- Defined in ‘Data.Function’</code></pre>
 
 			    <p class="fragment">The type signature
-			      means, "Give me a function from t to t,
-			      and I'll give you a t in return"</p>
+			      means, "Give me a function from a to a,
+			      and I'll give you an a"</p>
 			  </section>
 
 			  <section>
-			    <h3>Let's Define Our Own <code>fix</code></h3>
+			    <h3>Let's Define Our Own</h3>
 
-			    <pre class="fragment">
-			      <code>
-Prelude> let fix f = let x = f x in x
-Prelude> :info fix
-fix :: (t -> t) -> t 	-- Defined at interactive:2:5
-			      </code>
-			    </pre>
+			    <pre class="fragment"><code>Prelude> let converge f = let x = f x in x
+Prelude> :info converge
+converge :: (t -> t) -> t 	-- Defined at interactive:2:5</code></pre>
+
+			    <p class="fragment">I consider <code>converge</code> a more intuitive name</p>
 
 			    <p class="fragment">Same shape, different type variable</p>
 			  </section>
 
 			  <section>
-			    <h3>Factorial using <code>fix</code></h3>
+			    <h3>Factorial using <code>converge</code></h3>
 
-			    <pre class="fragment">
-			      <code>
-Prelude> let fact = fix (\f -> \n -> if n == 0 then 1 else n * f(n-1))
-Prelude> :info fact
-fact :: (Eq p, Num p) => p -> p 	-- Defined at interactive:6:5
-Prelude> fact 5
-120
-			      </code>
-			    </pre>
+			    <p class="fragment" style="text-align: left ; font-size: 50%">
+			      <code>Prelude> let fact = converge (\f -> \n -> if n == 0 then 1 else n * f <span style="border: 1px solid white">(n-1)</span>)<br />
+Prelude> :info fact<br />
+fact :: (Eq p, Num p) => p -> p 	-- Defined at interactive:6:5<br />
+Prelude> fact 5<br />
+120</code>
+			    </p>
 
-			    <p class="fragment">We pass fix an
+			    <p class="fragment">We pass converge an
 			    anonymous function taking "f". That
 			    function takes "n", an integer, and
 			    computes factorial with it.</p>
+
+			    <p class="fragment">I <span style="border: 1px solid white">highlighted</span> where the computation "shrinks" toward termination</p>
 			  </section>
 
 			  <section>
-			    <h3><code>fix</code>'s General Pattern</h3>
+			    <h3>General Recursion's Code Pattern</h3>
+
+			    <pre class="fragment"><code>converge (function) (function's arguments)</code></pre>
 
 			    <p class="fragment">One can "refactor" any
 			    recursive function following this
 			    pattern</p>
 
-			    <p class="fragment">The trick is finding a
-			    way to nudge the computation closer to
+			    <p class="fragment">The challenge is
+			    shrinking the computation closer to
 			    termination at each step</p>
+			  </section>
+
+			  <section>
+			    <h3>Computing an infinite series</h3>
+
+			    <div class="fragment">
+			      <p>What does this series compute?</p>
+
+			      <p>1/1! + 2/2! + 3/3! + ...</p>
+			    </div>
+
+			    <p style="font-size: 50% ; text-align: left"><code class="fragment">Prelude> let series = converge (\f -> \i -> if i == 1 then 1 else i/(fact i) + f <span style="border: 1px solid white">(i - 1)</span>)<br />
+Prelude> series 1<br />
+1.0<br />
+Prelude> series 2<br />
+2.0<br />
+Prelude> series 3<br />
+2.5<br />
+Prelude> series 6<br />
+2.7166666666666663<br />
+Prelude> series 9<br />
+2.71827876984127</code></p>
+
+			    <p class="fragment">It converges
+			    to <i>e</i> as the approximation
+			    improves</p>
 			  </section>
 
 			  <section>
 			    <h3>Divergence made easy!</h3>
 
-			    <p class="fragment">All of these diverge -- why?</p>
+			    <p class="fragment">These expressions diverge -- why?</p>
 
-			    <pre class="fragment"><code>fix (\id -> id)</code></pre>
+			    <pre class="fragment"><code>converge id</code></pre>
 
-			    <pre class="fragment"><code>fix (0:)</code></pre>
+			    <pre class="fragment"><code>converge (0:)</code></pre>
 
-			    <pre class="fragment"><code>fix (\n -> n + 1)</code></pre>
+			    <pre class="fragment"><code>converge (\n -> n + 1)</code></pre>
 
 			    <p class="fragment">Their computations don't shrink at each step</p>
 			  </section>
@@ -294,8 +324,9 @@ Prelude> fact 5
 
 			      <p class="fragment">
 				<a href="https://en.wikibooks.org/wiki/Haskell/Fix_and_recursion">Fix
-				  and recursion</a> in the Haskell
-				wikibook
+				  and recursion</a> in
+				  the <a href="https://en.wikibooks.org/wiki/Haskell">Haskell
+				  wikibook</a>
 			      </p>
 
 			      <p class="fragment">
