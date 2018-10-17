@@ -29,20 +29,18 @@
 
 			    <p>PFPL chapters 19 and 20 | TAPL chapter 11.11</p>
 
-			    <p class="fragment"><i>Key idea:</i>
-			    Exchange <span style="border: solid #8080ff
-			    2px">totality</span>
-			    for <span style="border: solid #ff8080
-			    2px">universality</span></p>
+			    <div class="fragment">
+			      <p>Structure of this presentation:</p>
 
-			    <p class="fragment"><i>Increase <span style="border: solid #ff8080
-			    2px">expressive
-				  power</span> of programs at the expense of
-				<span style="border: solid #8080ff
-					     2px">termination
-					     guarantee</span></i></p>
+			      <ul>
+				<li>Focus first on intuition and implications</li>
+				<li>Then dive into the details</li>
+			      </ul>
+			    </div>
 
+			    <p class="fragment"><a href="https://github.com/maniaphobic/cis607/">https://github.com/maniaphobic/cis607/</a></p>
 			  </section>
+
 			  <section>
 			    <h3>Surveying the Language Landscape</h3>
 
@@ -54,41 +52,44 @@
 				<th>Properties</th>
 			      </tr>
 			      <tr class="fragment">
-				<td><b>System T</b><br />(PFPL §9)</td>
+				<td><b>System T</b> (PFPL §9)</td>
 				<td>natural numbers, higher-order
 				functions, products, sums, booleans,
 				enumerations, options, totality, type
 				safety</td>
 			      </tr>
 			      <tr class="fragment">
-				<td><b>System M</b><br />(PFPL §15)</td>
+				<td><b>System M</b> (PFPL §15)</td>
 				<td><i>System T plus</i>
 				(co-)inductive types <i>(via recursion on
 				    types)</i></td>
 			      </tr>
 			      <tr class="fragment">
-				<td><b>System F</b><br />(PFPL §16)</td>
+				<td><b>System F</b> (PFPL §16)</td>
 				<td><i>System M plus</i> parametric polymorphic types</td>
 			      </tr>
 			      <tr class="fragment">
-				<td><b>System FE</b><br />(PFPL §17)</td>
+				<td><b>System FE</b> (PFPL §17)</td>
 				<td><i>System F plus</i> existentially-quantified types</td>
 			      </tr>
 			      <tr class="fragment">
-				<td><b>System F<sub>ω</sub></b><br />(PFPL §18)</td>
+				<td><b>System F<sub>ω</sub></b> (PFPL §18)</td>
 				<td><i>System FE plus</i> universally-quantified types</td>
 			      </tr>
 			    </table>
 			  </section>
 
 			  <section>
-			    <h3>What We Gain</h3>
+			    <h3>Progress is power!</h3>
 
 			    <p class="fragment">With each refinement, we:</p>
 
-			    <p class="fragment">Increase generality</p>
-			    <p class="fragment">Reduce type-specific syntax</p>
-			    <p class="fragment">Increase expressive power</p>
+			    <ul>
+			      <li class="fragment">Increase generality and reduce type-specific syntax (i.e., derive language constructs from general primitives)</li>
+			      <li class="fragment">Increase expressive power (i.e., more concise code -- think Haskell vs. Java)</li>
+			    </ul>
+
+			    <p class="fragment">... while maintaining type safety and totality</p>
 			  </section>
 
 			  <section>
@@ -133,16 +134,33 @@
 			      via <i>partial functions</i> and
 			      a <i>fixed-point operator</i></p>
 
-			    <p class="fragment">Programs remain
-			    well-typed, but may not terminate</p>
-
 			    <p class="fragment">A <i>partial
 				function</i> may diverge for some or
 				all inputs</p>
+
+			    <p class="fragment">Programs remain
+			    well-typed, but may not terminate</p>
 			  </section>
 
 			  <section>
-			    <h3>Recursive Evolution</h3>
+			    <h3>PCF's Central Tenet</h3>
+
+			    <p class="fragment">Exchange <span style="border:
+			    solid #8080ff 2px">totality</span>
+			    for <span style="border: solid #ff8080
+			    2px">universality</span></p>
+
+			    <p class="fragment"><i>Increase <span style="border: solid #ff8080
+			    2px">expressive
+				  power</span> of programs at the expense of
+				<span style="border: solid #8080ff
+					     2px">termination
+					     guarantees</span></i></p>
+
+			  </section>
+
+			  <section>
+			    <h3>Primitive vs. General Recursion</h3>
 
 			    <p class="fragment">We've relied thus far
 			      on <i>primitive recursion</i>:</p>
@@ -151,6 +169,7 @@
 			      <li class="fragment">System
 				  T's <code>rec()</code> (recursor)
 				  construct (PFPL §9)</li>
+			      <li class="fragment">Recursion without <i>self-reference</i> <i>TRUE?</i></li>
 			      <li class="fragment">Iconic example
 			      functions: addition, multiplication,
 			      factorial</li>
@@ -158,7 +177,7 @@
 			  </section>
 
 			  <section>
-			    <h3>Recursive Evolution</h3>
+			    <h3>Primitive vs. General Recursion</h3>
 
 			    <p class="fragment">We define <i>general
 				recursion</i> via the <i>fixed-point operator</i>:</p>
@@ -171,7 +190,8 @@
 			      output." <span style="font-size: 50% ;
 			      font-style:
 			      italic">(<a href="https://en.wikipedia.org/wiki/Fixed-point_combinator">Wikipedia</a>)</span></li>
-			      <li class="fragment">Symbolically: <code>F(x) = x</code></li>
+			      <li class="fragment">Symbolically: <code>F(f) = f</code></li>
+			      <li class="fragment">@!#?@!</li>
 			    </ul>
 			  </section>
 
@@ -180,9 +200,7 @@
 
 			    <p class="fragment">A function
 			    named <code>fix</code> that takes a
-			    function and returns the same function, for all functions</p>
-
-			    <p class="fragment">Mathematically, <code>F(f) = f</code></p>
+			    function and returns the same function</p>
 
 			    <p class="fragment">Big F is technically a <i>functional</i></p>
 
@@ -197,55 +215,47 @@
 			  </section>
 
 			  <section>
-			    <h3>Haskell's <code>fix</code></h3>
+			    <h3>Wait, what just happened?</h3>
 
-			    <p class="fragment">Haskell's <code>Data.Function</code>
-			    module defines <code>fix</code>:</p>
+			    <p class="fragment">We mandated
+			    that <code>rec()</code> carry around its
+			      base and recursive cases <i>TRUE?</i></p>
 
-			    <pre class="fragment"><code>Prelude> import Data.Function
-Prelude Data.Function> :info fix
-fix :: (a -> a) -> a 	-- Defined in ‘Data.Function’</code></pre>
-
-			    <p class="fragment">The type signature
-			      means, "Give me a function from a to a,
-			      and I'll give you an a"</p>
+			    <p class="fragment"><code>fix</code>
+			    expects its function argument to
+			    supply all of the code <i>TRUE?</i></p>
 			  </section>
 
 			  <section>
-			    <h3>Let's Define Our Own</h3>
+			    <h3>Self-reference begets partiality</h3>
 
-			    <pre class="fragment"><code>Prelude> let converge f = let x = f x in x
-Prelude> :info converge
-converge :: (t -> t) -> t 	-- Defined at interactive:2:5</code></pre>
+			    <p><i>Per Jake Zimmerman</i></p>
 
-			    <p class="fragment">I consider <code>converge</code> a more intuitive name</p>
+			    <p class="fragment"><code>fix</code> gave us <i>partiality</i> because it also gave us <i>self-reference</i></p>
 
-			    <p class="fragment">Same shape, different type variable</p>
+			    <p class="fragment">A self-referential expression is isomorphic to having an expression with <i>itself in scope</i></p>
+
+			    <p class="fragment">Help! Why does self-reference provide partiality?</p>
 			  </section>
 
 			  <section>
-			    <h3>Factorial using <code>converge</code></h3>
+			    <h3>Partiality begets universality</h3>
 
-			    <p class="fragment" style="text-align: left ; font-size: 50%">
-			      <code>Prelude> let fact = converge (\f -> \n -> if n == 0 then 1 else n * f <span style="border: 1px solid white">(n-1)</span>)<br />
-Prelude> :info fact<br />
-fact :: (Eq p, Num p) => p -> p 	-- Defined at interactive:6:5<br />
-Prelude> fact 5<br />
-120</code>
-			    </p>
+			    <p class="fragment">PFPL §9.4
+			      (inscrutably) proves why totality <i>prevents</i>
+			    universality</p>
 
-			    <p class="fragment">We pass converge an
-			    anonymous function taking "f". That
-			    function takes "n", an integer, and
-			    computes factorial with it.</p>
+			    <p class="fragment">PFPL §19.3
+			    (inscrutably) argues that PCF is
+			    universal (i.e., can interpret itself)</p>
 
-			    <p class="fragment">I <span style="border: 1px solid white">highlighted</span> where the computation "shrinks" toward termination</p>
+			    <p class="fragment">Help! Why does partiality imply universality?</p>
 			  </section>
 
 			  <section>
 			    <h3>General Recursion's Code Pattern</h3>
 
-			    <pre class="fragment"><code>converge (function) (function's arguments)</code></pre>
+			    <pre class="fragment"><code>fix (function) (function's arguments)</code></pre>
 
 			    <p class="fragment">One can "refactor" any
 			    recursive function following this
@@ -257,25 +267,75 @@ Prelude> fact 5<br />
 			  </section>
 
 			  <section>
-			    <h3>Computing an infinite series</h3>
+			    <h3>Haskell's <code>fix</code></h3>
+
+			    <p class="fragment">Haskell's <code>Data.Function</code>
+			    module defines <code>fix</code>:</p>
+
+			    <pre class="fragment"><code>Prelude> import Data.Function
+Prelude Data.Function> :info fix
+fix :: (a -> a) -> a</code></pre>
+
+			    <p class="fragment">Its implementation is simple but subtle:</p>
+
+			    <pre class="fragment"><code>fix f = let x = f x in x</code></pre>
+
+			    <p class="fragment">The type signature
+			      means, "Give me a function from a to a,
+			      and I'll give you an a"</p>
+			  </section>
+
+			  <!--
+			  <section>
+			    <h3>Let's Define Our Own</h3>
+
+			    <pre class="fragment"><code>Prelude> let converge f = let x = f x in x
+Prelude> :info converge
+converge :: (t -> t) -> t</code></pre>
+
+			    <p class="fragment">I consider <code>converge</code> a more intuitive notion</p>
+
+			    <p class="fragment">Same shape, different type variable</p>
+			  </section>
+			  -->
+
+			  <section>
+			    <h3>Factorial using <code>fix</code></h3>
+
+			    <p class="fragment" style="text-align: left ; font-size: 50%">
+			      <code>Prelude> let fact = fix (\f -> \n -> if n == 0 then 1 else n * f <span style="border: 1px solid white">(n-1)</span>)<br />
+Prelude> :info fact<br />
+fact :: (Eq p, Num p) => p -> p<br />
+Prelude> fact 5<br />
+120</code>
+			    </p>
+
+			    <p class="fragment">We pass fix an
+			    anonymous function taking "f", a reference
+			    to itself, and "n", an integer, and
+			      computes <code>n!</code></p>
+
+			    <p class="fragment">I <span style="border: 1px solid white">highlighted</span> where the computation "shrinks" toward termination</p>
+			  </section>
+
+			  <section>
+			    <h3>Expanding an infinite series</h3>
 
 			    <div class="fragment">
-			      <p>What does this series compute?</p>
+			      <p>What does this infinite series represent?</p>
 
 			      <p>1/1! + 2/2! + 3/3! + ...</p>
 			    </div>
 
-			    <p style="font-size: 50% ; text-align: left"><code class="fragment">Prelude> let series = converge (\f -> \i -> if i == 1 then 1 else i/(fact i) + f <span style="border: 1px solid white">(i - 1)</span>)<br />
+			    <p style="font-size: 50% ; text-align: left"><code class="fragment">Prelude> let series = fix (\f -> \i -> if i == 1 then 1 else i/(fact i) + f <span style="border: 1px solid white">(i - 1)</span>)<br />
 Prelude> series 1<br />
 1.0<br />
 Prelude> series 2<br />
 2.0<br />
-Prelude> series 3<br />
-2.5<br />
-Prelude> series 6<br />
-2.7166666666666663<br />
-Prelude> series 9<br />
-2.71827876984127</code></p>
+Prelude> series 5<br />
+2.708333333333333<br />
+Prelude> series 10<br />
+2.7182815255731922</code></p>
 
 			    <p class="fragment">It converges
 			    to <i>e</i> as the approximation
@@ -287,13 +347,13 @@ Prelude> series 9<br />
 
 			    <p class="fragment">These expressions diverge -- why?</p>
 
-			    <pre class="fragment"><code>converge id</code></pre>
+			    <pre class="fragment"><code>fix id</code></pre>
 
-			    <pre class="fragment"><code>converge (0:)</code></pre>
+			    <pre class="fragment"><code>fix (0:)</code></pre>
 
-			    <pre class="fragment"><code>converge (\n -> n + 1)</code></pre>
+			    <pre class="fragment"><code>fix (\n -> n + 1)</code></pre>
 
-			    <p class="fragment">Their computations don't shrink at each step</p>
+			    <p class="fragment">Answer: their computations don't shrink each iteration</p>
 			  </section>
 
 			  <section>
@@ -355,14 +415,15 @@ Prelude> series 9<br />
 			// More info about config & dependencies:
 			// - https://github.com/hakimel/reveal.js#configuration
 			// - https://github.com/hakimel/reveal.js#dependencies
-			Reveal.initialize({
-				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-				]
-			});
+		  Reveal.initialize({
+		    dependencies: [
+		      { src: 'plugin/markdown/marked.js' },
+		      { src: 'plugin/markdown/markdown.js' },
+		      { src: 'plugin/notes/notes.js', async: true },
+		      { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+		    ],
+		    width: 960
+		  });
 		</script>
 	</body>
 </html>
